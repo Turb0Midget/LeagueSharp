@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 
 
 namespace MightyJayce
@@ -13,7 +14,7 @@ namespace MightyJayce
     {
         static void Main(string[] args)
         {
-            CustomEvents.Game.OnGameLoad += Menu.OnLoad;
+            CustomEvents.Game.OnGameLoad += ConfigMenu.OnLoad;
         }
 
     }
