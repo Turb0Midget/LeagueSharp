@@ -16,6 +16,16 @@ namespace MightyJayce
         {
             CustomEvents.Game.OnGameLoad += ConfigMenu.OnLoad;
         }
+        public static void Printchat(string message)
+        {
 
+            Game.PrintChat(
+                "<font color='#FFB90F'>[Console]:</font> <font color='#FFFFFF'>" + message + "</font>");
+        }
+        public static void Printmsg(string message)
+        {
+            Game.PrintChat(
+                "<font color='#00ff00'>[Cheerleader Lux]:</font> <font color='#FFFFFF'>" + message + "</font>");
+        }
     }
 }
