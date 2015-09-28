@@ -17,11 +17,30 @@ namespace MightyJayce
         public static Orbwalking.Orbwalker Orbwalker;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         public const string ChampName = "Jayce";
+        public static Spell CannonQ, CannonW, CannonE, CannonQE;
+        public static Spell HammerQ, HammerW, HammerE, R;
 
         public static void OnLoad(EventArgs args)
         {
             if (Player.ChampionName != ChampName)
                 return;
+
+            CannonQ = new Spell(SpellSlot.Q, 1050);
+            CannonW = new Spell(SpellSlot.W);
+            CannonE = new Spell(SpellSlot.E, 650);
+            CannonQE = new Spell(SpellSlot.Q, 1600);
+
+            HammerQ = new Spell(SpellSlot.Q, 600);
+            HammerW = new Spell(SpellSlot.W, 285);
+            HammerE = new Spell(SpellSlot.E, 240);
+
+            R = new Spell(SpellSlot.R, 0);
+
+            CannonQ.SetSkillshot(0.3f, 70f, 1500, true, SkillshotType.SkillshotLine);
+            CannonQE.SetSkillshot(0.3f, 70f, 2180, true, SkillshotType.SkillshotLine);
+
+            HammerQ.SetTargetted(HammerQ.Instance.SData.SpellCastTime, HammerQ.Instance.SData.MissileSpeed);
+            HammerE.SetTargetted(HammerE.Instance.SData.SpellCastTime, HammerE.Instance.SData.MissileSpeed);
 
             Config = new Menu("MightyJayce", "MightyJayce", true);
             TargetSelector.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
@@ -66,8 +85,10 @@ namespace MightyJayce
             // Laneclear
             var cannonclear = laneclear.AddSubMenu(new Menu("Cannon", "Cannonclear"));
             cannonclear.AddItem(new MenuItem("RangedClearQ", "Use Q").SetValue(true));
+            cannonclear.AddItem(new MenuItem("RangedClearQHit", "If Minion Hit").SetValue(new Slider(2, 6, 0)));
             cannonclear.AddItem(new MenuItem("RangedClearW", "Use W").SetValue(true));
-            cannonclear.AddItem(new MenuItem("RangedClearE", "Use E").SetValue(true));
+            cannonclear.AddItem(new MenuItem("RangedClearQE", "Use Q + E").SetValue(true));
+            cannonclear.AddItem(new MenuItem("RangedClearQEHit", "If Minions Hit").SetValue(new Slider(3, 6, 0)));
 
             var hammerclear = laneclear.AddSubMenu(new Menu("Hammer", "Hammerclear"));
             hammerclear.AddItem(new MenuItem("HammerClearQ", "Use Q").SetValue(true));
