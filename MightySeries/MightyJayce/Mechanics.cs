@@ -10,15 +10,15 @@ using SharpDX;
 
 namespace MightyJayce
 {
-    class Mechanics : ConfigMenu
+    class Mechanics : Extensions
     {
         public static void EventLoader() //Call OrbwalkerModes
         {
             Obj_AI_Hero.OnProcessSpellCast += Combo_Timer;
             Obj_AI_Hero.OnBuffRemove += CannonWtimer;
-
+            
         }
-
+        public static bool HammerMode { get { return HammerQ.Instance.Name == "JayceToTheSkies"; } }
         private static void CannonWtimer(Obj_AI_Base sender, Obj_AI_BaseBuffRemoveEventArgs args)
         {
             if (sender.IsMe && args.Buff.Name == "jaycehypercharge")
@@ -145,6 +145,7 @@ namespace MightyJayce
         }
 
         #endregion ------------------ Get Cooldown Times --------------------------
+
 
     }
 }

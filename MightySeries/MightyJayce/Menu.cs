@@ -15,7 +15,7 @@ namespace MightyJayce
     {
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
-        private static readonly Obj_AI_Hero Player = ObjectManager.Player;
+        public static readonly Obj_AI_Hero Player = ObjectManager.Player;
         public const string ChampName = "Jayce";
         public static Spell CannonQ, CannonW, CannonE, CannonQE;
         public static Spell HammerQ, HammerW, HammerE, R;
@@ -36,8 +36,8 @@ namespace MightyJayce
 
             R = new Spell(SpellSlot.R, 0);
 
-            CannonQ.SetSkillshot(0.3f, 70f, 1500, true, SkillshotType.SkillshotLine);
-            CannonQE.SetSkillshot(0.3f, 70f, 2180, true, SkillshotType.SkillshotLine);
+            CannonQ.SetSkillshot(0.3f, 70f, 1500, true, SkillshotType.SkillshotCircle);
+            CannonQE.SetSkillshot(0.3f, 70f, 2180, true, SkillshotType.SkillshotCircle);
 
             HammerQ.SetTargetted(HammerQ.Instance.SData.SpellCastTime, HammerQ.Instance.SData.MissileSpeed);
             HammerE.SetTargetted(HammerE.Instance.SData.SpellCastTime, HammerE.Instance.SData.MissileSpeed);
@@ -98,9 +98,7 @@ namespace MightyJayce
             laneclear.AddItem(new MenuItem("SwitchClear", "Auto Switch R").SetValue(true));
 
             // Lasthit
-            lasthit.AddItem(new MenuItem("LasthitQ", "Lasthit Big Minion with Q").SetValue(false));
-
-            Config.AddToMainMenu();
+            lasthit.AddItem(new MenuItem("LasthitQ", "Lasthit Big Minion with Q").SetValue(false));          
 
             // Jungleclear
             var cannonjungle = jungleclear.AddSubMenu(new Menu("Cannon", "Cannonclear"));
@@ -115,6 +113,7 @@ namespace MightyJayce
 
             jungleclear.AddItem(new MenuItem("SwitchJungle", "Auto Switch R").SetValue(true));
 
+            Config.AddToMainMenu();
             Drawings.DrawEvent();
             Mechanics.EventLoader();
 
