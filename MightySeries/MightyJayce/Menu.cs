@@ -115,6 +115,9 @@ namespace MightyJayce
 
             jungleclear.AddItem(new MenuItem("SwitchJungle", "Auto Switch R").SetValue(true));
 
+            Drawings.DrawEvent();
+            Mechanics.EventLoader();
+
         }
     }
 }

@@ -15,17 +15,18 @@ namespace MightyJayce
         public static void EventLoader() //Call OrbwalkerModes
         {
             Obj_AI_Hero.OnProcessSpellCast += Combo_Timer;
+            Obj_AI_Hero.OnBuffRemove += CannonWtimer;
+
         }
+
+        private static void CannonWtimer(Obj_AI_Base sender, Obj_AI_BaseBuffRemoveEventArgs args)
+        {
+            if (sender.IsMe && args.Buff.Name == "jaycehypercharge")
+                cannonwtime = Utils.GameTimeTickCount;
+        }
+
         public static int hammerqtime, hammerwtime, hammeretime, cannonqtime, cannonwtime, cannonetime, hammerrtime, cannonrtime;
 
-
-
-
-        /// <summary>
-        ///  OnProcessSpellcast, in this case being used as a cooldown/ready checker for multiple spells.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         public static void Combo_Timer(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             //JayceToTheSkies           //Q
@@ -57,76 +58,90 @@ namespace MightyJayce
                 case "jayceshockblast": //Cannon [Q]
                     cannonqtime = Utils.GameTimeTickCount;
                     break;
-                case "jaycehypercharge": //Cannon [W]
-                    cannonwtime = Utils.GameTimeTickCount;
-                    break;
                 case "jayceaccelerationgate": //Cannon [E]
                     cannonetime = Utils.GameTimeTickCount;
                     break;
-                case "JayceStanceHTG": //Switch to Cannon
+                case "JayceStanceHtG": //Switch to Cannon
                     hammerrtime = Utils.GameTimeTickCount;
                     break;
                 case "jaycestancegth": //Switch to Hammer
-                    cannonrtime = Utils.GameTimeTickCount;
+                    hammerrtime = Utils.GameTimeTickCount;
                     return;
+            }
 
-                    //if (sender.IsMe)
-                    //{
-                    //    Printchat(args.SData.Name);
-                    //}
+            if (sender.IsMe)
+            {
+                Printchat(args.SData.Name);
             }
         }
 
         #region -------------------- Ready Checks -------------------------------
-        public static float Ready_Hammer_Q()
+        public static double Ready_Hammer_Q()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - hammerqtime >= Hammer_Q_CD() * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return Hammer_Q_CD() * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - hammerqtime);
         }
-        public static float Ready_Hammer_W()
+        public static double Ready_Hammer_W()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - hammerwtime >= 10000 * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return 10000 * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - hammerwtime);
         }
-        public static float Ready_Hammer_E()
+        public static double Ready_Hammer_E()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - hammeretime >= Hammer_E_CD() * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return Hammer_E_CD() * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - hammeretime);
         }
-        public static float Ready_Hammer_R()
+        public static double Ready_R()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - hammerrtime >= 6000 * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return 6000 * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - hammerrtime);
         }
-        public static float Ready_Cannon_Q()
+        public static double Ready_Cannon_Q()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - cannonqtime >= 8000 * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return 8000 * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - cannonqtime);
         }
-        public static float Ready_Cannon_W()
+        public static double Ready_Cannon_W()
         {
-            return 0;
+            if (Utils.GameTimeTickCount - cannonwtime >= Cannon_W_CD() * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return Cannon_W_CD() * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - cannonwtime);
         }
-        public static float Ready_Cannon_E()
+        public static double Ready_Cannon_E()
         {
-            return 0;
-        }
-        public static float Ready_Cannon_R()
-        {
-            return 0;
+            if (Utils.GameTimeTickCount - cannonetime >= 16000 * (1 + ObjectManager.Player.PercentCooldownMod))
+                return 0;
+
+            else return 16000 * (1 + ObjectManager.Player.PercentCooldownMod) - (Utils.GameTimeTickCount - cannonetime);
         }
         #endregion ------------------ End Ready Checks ----------------------------
 
         #region   ------------------- Get Cooldown times --------------------------
-        public static int Hammer_Q_CD() //Actual Hammer Q cooldown - From The Skies!
+        public static double Hammer_Q_CD() //Actual Hammer Q cooldown - From The Skies!
         {
             return
-                new int[] { 0, 16, 14, 12, 10, 8 }[CannonQ.Level];
+                new double[] { 0, 16, 14, 12, 10, 8, 6 }[CannonQ.Level] * 1000;
         }
-        public static int Hammer_E_CD() //Actual Hammer E cooldown - Thundering Blow
+        public static double Hammer_E_CD() //Actual Hammer E cooldown - Thundering Blow
         {
             return
-                new int[] { 14, 12, 12, 11, 10, 8 }[HammerE.Level];
+                new double[] { 0, 15, 14, 13, 12, 11, 10 }[HammerE.Level] * 1000;
         }
-        public static int Cannon_E_CD() //Actual Cannon E Cooldown - Acceleration Gate
+        public static double Cannon_W_CD() //Actual Cannon E Cooldown - Acceleration Gate
         {
             return
-                new int[] { 0, 14, 12, 12, 11, 10 }[CannonE.Level];
+                new double[] { 0, 13, 11.4, 9.8, 8.2, 6.6, 5 }[CannonW.Level] * 1000;
         }
 
         #endregion ------------------ Get Cooldown Times --------------------------
