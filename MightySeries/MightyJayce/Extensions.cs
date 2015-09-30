@@ -113,7 +113,9 @@ namespace MightyJayce
         }
         private static void laneclear_AutoSwitch()
         {
-            throw new NotImplementedException();
+            //?
+            //?
+            //?
         }
 
     }
