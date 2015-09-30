@@ -69,6 +69,7 @@ namespace MightyJayce
                     return;
             }
 
+
             if (sender.IsMe)
             {
                 Printchat(args.SData.Name);

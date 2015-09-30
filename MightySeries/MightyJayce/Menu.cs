@@ -115,8 +115,9 @@ namespace MightyJayce
 
             Config.AddToMainMenu();
             Drawings.DrawEvent();
-            Mechanics.EventLoader();
+            Mechanics.EventLoader();         
 
         }
+
     }
 }
